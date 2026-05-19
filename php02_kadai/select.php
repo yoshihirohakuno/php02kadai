@@ -1,9 +1,13 @@
 <?php
 //1.  DB接続します
 try {
-  //ID MAMP ='root'
-  //Password:MAMP='root',XAMPP=''
-  $pdo = new PDO('mysql:dbname=gs_book_db;charset=utf8;host=localhost','root','root');
+  $dsn = getenv('DB_DSN') ?: 'mysql:dbname=gs_book_db;charset=utf8;host=localhost';
+  $db_user = getenv('DB_USER');
+  $db_password = getenv('DB_PASSWORD');
+  if ($db_user === false || $db_password === false) {
+    exit('DB credentials are not configured.');
+  }
+  $pdo = new PDO($dsn, $db_user, $db_password);
 } catch (PDOException $e) {
   exit('DBConnectError:'.$e->getMessage());
 }
